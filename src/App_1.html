@@ -1,0 +1,154 @@
+<template>
+  <div id="app" >
+	  <div class="container">
+
+          <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+            <!-- Brand/logo -->
+            <a class="navbar-brand" href="#">
+                <img src="./images/logo.png" alt="logo" style="width:40px;">
+            </a>
+            
+            <!-- Links -->
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                <a class="nav-link" href="#">Link 1</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="#">Link 2</a>
+                </li>
+                <li class="nav-item">
+                <a class="nav-link" href="#">Link 3</a>
+                </li>
+            </ul>
+            </nav>
+
+	  	<div style="margin-top: 2rem; padding-bottom: 1rem;"><h1>Make Bootstrap Sexy Again</h1></div>
+       
+        <!-- Alerts -->
+		<h2>Alerts</h2>
+		<div style="padding: 1rem;">
+			<div v-for="brand in ['success', 'info', 'warning', 'danger']" class="alert" :class="'alert-' + brand" :key="brand">
+	  		  <strong>Well done!</strong> You successfully read this {{brand}} alert message.
+	  	    </div>
+		</div>
+		<h2>Breadcrumb</h2>
+		<div style="padding: 1rem;">
+			<ol class="breadcrumb">
+			  <li class="breadcrumb-item"><a href="#">Home</a></li>
+			  <li class="breadcrumb-item"><a href="#">Library</a></li>
+			  <li class="breadcrumb-item active">Data</li>
+			</ol>
+		</div>
+
+        <!-- Tables -->
+        <h2>Hoverable Dark Table</h2>
+        <p>The .table-hover class adds a hover effect (grey background color) on table rows:</p>            
+        <table class="table table-dark table-hover">
+            <thead>
+            <tr>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>Email</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>John</td>
+                <td>Doe</td>
+                <td>john@example.com</td>
+            </tr>
+            <tr>
+                <td>Mary</td>
+                <td>Moe</td>
+                <td>mary@example.com</td>
+            </tr>
+            <tr>
+                <td>July</td>
+                <td>Dooley</td>
+                <td>july@example.com</td>
+            </tr>
+            </tbody>
+        </table>
+
+		<!-- Buttons-->
+		<h2>Buttons</h2>
+		<div style="padding: 1rem;">
+			  <div v-for="type in ['', 'outline']" :key="type">
+				  <span v-for="brand in ['primary', 'secondary', 'success', 'info', 'warning', 'danger']" :key="brand">
+					  <button role="button" class="btn" :class="'btn-' + (type.length ? (type + '-') : '') + brand" style="margin-bottom: 1rem; margin-right: 1rem;">
+						  {{brand}} {{type}}
+					  </button>
+				  </span>
+			  </div>
+		</div>
+		<!-- Progress-->
+		<h2>Progress</h2>
+		<div style="padding: 1rem;">
+		  <div v-for="brand in ['success', 'info', 'warning', 'danger']" :key="brand" class="progress" style='margin-bottom: 1rem;'>
+			  <div class="progress-bar" :class="'bg-' + brand" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+		  </div>
+		</div>
+
+        <!-- Background Colors -->
+        <div style="padding: 1rem;">
+            <h2>Contextual Backgrounds</h2>
+            <p>Use the contextual background classes to provide "meaning through colors".</p>
+            <p>Note that you can also add a .text-* class if you want a different text color:</p>
+            <p class="bg-primary text-white">This text is important.</p>
+            <p class="bg-success text-white">This text indicates success.</p>
+            <p class="bg-info text-white">This text represents some information.</p>
+            <p class="bg-warning text-white">This text represents a warning.</p>
+            <p class="bg-danger text-white">This text represents danger.</p>
+            <p class="bg-secondary text-white">Secondary background color.</p>
+            <p class="bg-dark text-white">Dark grey background color.</p>
+            <p class="bg-light text-dark">Light grey background color.</p>
+        </div>
+
+		<!-- Notice-->
+		<h2>Modal</h2>
+		<div style="padding: 1rem;">
+		  <div class="modal-dialog" role="document">
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h5 class="modal-title">Modal title</h5>
+		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		          <span aria-hidden="true">&times;</span>
+		        </button>
+		      </div>
+		      <div class="modal-body">
+		        <p>Modal body text goes here.</p>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-primary">Save changes</button>
+		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		<!-- Spacing utilities-->
+		<h2>Spacing utilities</h2>
+		<div style="padding: 1rem;">
+		  <div v-for="brand in ['success', 'info', 'warning', 'danger']" :key="brand" class="progress" style='margin-bottom: 1rem;'>
+			  <div class="progress-bar" :class="'bg-' + brand" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+		  </div>
+		</div>
+	  </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "app"  
+};
+</script>
+
+<style lang="scss">
+body, html {
+    height: 100%;
+    margin: 0;
+    background-image: url("./images/background.jpg");
+    background-repeat:repeat-y;
+}
+@import "styles/custom-bootstrap.scss";
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
+</style>
