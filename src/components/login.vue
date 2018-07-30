@@ -1,6 +1,9 @@
 <template>
 <div class="container py-5">
-    <div class="row">
+    <div class="loader" v-if="loading">
+
+    </div>
+    <div class="row" v-else>
         <div class="col-md-12">            
             <div class="row">
                 <div class="col-md-6 mx-auto">
@@ -27,10 +30,7 @@
                                       <span class="custom-control-indicator"></span>
                                       <span class="custom-control-description small text-dark">Recordar mi credenciales</span>
                                     </label>
-                                </div>
-                               <div class="form-group" v-if="loading">
-                                    <div class="loader"></div>
-                               </div>                                
+                                </div>                              
                                 <div  class="form-group" v-if="intentos>0">
                                      <div class="alert alert-warning alert-dismissable">
                                     <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -58,7 +58,7 @@
 export default {
   data() {
     return {
-      login: { username: 'dax7xad@gmail.com', password: '@Prestanic1' },
+      login: { username: 'dax7xad@gmail.com', password: '' },
       intentos: 0,
       loading:false,
     };
@@ -104,10 +104,16 @@ export default {
 <style>
 
 .loader {
-  border: 12px solid #f3f3f3;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 1;
+  width: 150px;
+  height: 150px;
+  margin: -75px 0 0 -75px;
+  border: 16px solid #f3f3f3;
   border-radius: 50%;
-  border-top: 12px solid blue;
-  border-bottom: 12px solid blue;
+  border-top: 16px solid #3498db;
   width: 120px;
   height: 120px;
   -webkit-animation: spin 2s linear infinite;

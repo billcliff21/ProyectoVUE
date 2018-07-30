@@ -24,15 +24,27 @@ const ModuloTareas = (function (GlCnx) {
     });
   }
 
-  function _getTareasByforeKey(foreKey){
-    console.log("ForeKey=>",foreKey);
+  function _detelebyKey(key){
+    return new Promise((resolve, reject) => {
+      TareasRef.child(key).remove()                   
+      .then(() => {
+          resolve(true);
+      })
+      .catch(error => {
+          reject(error);
+      });
+    })
+  }
+
+  function _getTareasByforeKey(foreKey,_commit){       
     //foreKey="005_SIBOIF_Desarrollo";
     return new Promise((resolve, reject) => {
-      TareasRef.orderByChild('foreKey').equalTo(foreKey).limitToLast(5).once('value').then(snapshot => {
+      TareasRef.orderByChild('foreKey').equalTo(foreKey).limitToFirst(50).on('value',snapshot => {
         _tareas = GlCnx.snapshotToArray(snapshot);
         //_actividades.push( _snapshotToArray(snapshot));
           console.log("desde getTareas", _tareas);
-          resolve(_tareas);
+          _commit('setTareas', _tareas);
+          resolve(true);
         });
      }) 
   }
@@ -41,6 +53,7 @@ const ModuloTareas = (function (GlCnx) {
   return {
     Save: _SaveTarea,
     getTareasByForekey: _getTareasByforeKey,
+    Delete:_detelebyKey, 
   };
 })(ModuloCnx);
 
@@ -55,9 +68,11 @@ const mutations = {
 const actions = {
   GetAllTareasAsync: ({commit},foreKey) => {
     // Do something here... lets say, a http call using vue-resource
-    ModuloTareas.getTareasByForekey(foreKey).then(response => {
+    ModuloTareas.getTareasByForekey(foreKey,commit).then(response => {
       // http success, call the mutator and change something in state
-      commit('setTareas', response);
+      if(response) console.log('tareas recuperadas con exito');
+      //commit('setTareas', response);
+      return true;
     })
       .catch(e => {
         console.warn("error=>", e);
@@ -66,6 +81,17 @@ const actions = {
   GrabarTareasAsync: ({ commit }, tarea) => {
     ModuloTareas.Save(tarea).then(response => {
       if (response) console.info('tarea guardada exitosamente');
+    });
+  },
+  EliminarTareaAsync:({ commit }, key) => {
+    ModuloTareas.Delete(key).then(response =>{
+      if(response) { 
+        console.info('Se ha removido exitosamente');
+        return true;        
+      }else{
+        conselo.warn('Fallo al remover la tarea');
+        return false;
+      }
     });
   }
 }

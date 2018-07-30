@@ -1,6 +1,46 @@
 <!-- Vista -->
 <template>
 <b-container fluid>
+
+<br>
+
+<div class="card">
+  <div class="card-body">
+       <!-- User Interface controls -->
+    <b-row>
+      <b-col md="6" class="my-1">
+        <b-form-group horizontal label="Filtrar" class="mb-0">
+          <b-input-group>
+            <b-form-input v-model="filter" placeholder="Realizar busqueda" />
+            <b-input-group-append>
+              <b-btn :disabled="!filter" @click="filter = ''">Limpiar</b-btn>
+            </b-input-group-append>
+          </b-input-group>
+        </b-form-group>
+      </b-col>
+      <b-col md="6" class="my-1">
+        <b-form-group horizontal label="Orden" class="mb-0">
+          <b-input-group>
+            <b-form-select v-model="sortBy" :options="sortOptions">
+              <option slot="first" :value="null">-- none --</option>
+            </b-form-select>
+            <b-form-select :disabled="!sortBy" v-model="sortDesc" slot="append">
+              <option :value="false">Asc</option>
+              <option :value="true">Desc</option>
+            </b-form-select>
+          </b-input-group>
+        </b-form-group>
+      </b-col>
+      <b-col md="6" class="my-1">
+        <b-form-group horizontal label="Paginación" class="mb-0">
+          <b-form-select :options="pageOptions" v-model="perPage" />
+        </b-form-group>
+      </b-col>
+    </b-row>
+  </div>
+</div>
+
+
       <!-- Main table element -->
     <b-table show-empty
              stacked="md"
@@ -18,15 +58,16 @@
       <template slot="isActive" slot-scope="row">{{row.value?'Yes :)':'No :('}}</template>
       <template slot="actions" slot-scope="row">
         <!-- We use @click.stop here to prevent a 'row-clicked' event from also happening -->
-        <b-button size="sm" @click.stop="info(row.item, row.index, $event.target)" class="mr-1">
-          + tarea
-        </b-button>
+
         <b-button size="sm" @click.stop="row.toggleDetails">
-          {{ row.detailsShowing ? 'Hide' : 'Ver' }} detalle
+          {{ row.detailsShowing ? '-' : '+' }} Detalle
         </b-button>
 
-        <b-button size="sm" @click.stop="irTareas(row.item)" class="mr-1">
-          Ver treas
+        <b-button size="sm" @click.stop="info(row.item, row.index, $event.target)" class="mr-1">
+          Agregar
+        </b-button>
+        <b-button size="sm" v-if="row.item.tareas>0" @click.stop="irTareas(row.item)" class="mr-1">
+          Listar
         </b-button>
       </template>
       <template slot="row-details" slot-scope="row">
@@ -95,12 +136,11 @@ const items = [
 */
 //import Tareas from './tareas.vue';
 export default {
-
-created() {    
-    this.getactividades(this.items).then(response => {
-      console.log("desde aqui me estoy ejecutando..",this.items);      
-      this.items= response;
-      this.totalRows = response.length;
+  name: 'actividades',
+  mounted() {
+    this.$store.dispatch("GetAllActividades").then(response => {
+      //this.items = this.$store.getters.getActividades;
+      this.totalRows = this.items.length;
       //GetAllTareasAsync
       //const foreKey = "005_SIBOIF_Desarrollo";
       //this.$store.dispatch("GetAllTareasAsync", foreKey);
@@ -108,8 +148,9 @@ created() {
   },
   data() {
     return {
-      items: [],      
-      getactividades:this.$store.state.actividades.actividadesdb,
+      //items: [],
+      //actividades:actividades,
+
       //#region Encabezados
       fields: [
         {
@@ -190,14 +231,14 @@ created() {
 
         {
           key: "actions",
-          label: "Actions"
+          label: "Tareas"
         }
       ],
       //#endregion
 
       currentPage: 1,
       perPage: 5,
-      totalRows:10, //this.items.length,
+      totalRows: 0, //this.actividades.length,
       pageOptions: [5, 10, 15],
       sortBy: null,
       sortDesc: false,
@@ -217,11 +258,9 @@ created() {
         return { text: f.label, value: f.key };
       });
     },
-    /*
-    items() { 
+    items(){
       return this.$store.getters.getActividades;
-      },   
-    */   
+    }
   },
   methods: {
     info(item, index, button) {

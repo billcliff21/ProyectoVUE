@@ -6,15 +6,15 @@ const ModuloActividades = (function (GlCnx) {
   console.log("GlCnx", GlCnx);
   const _db = GlCnx.db;
   const actividadesRef = _db.ref('Actividades');
-  //let _actividades = [];
+  let _actividades = [];
   // Metodos
-  function getActividades(actividades)  {
+  function getActividades(_commit) {
    return new Promise((resolve, reject) => {
     actividadesRef.on('value',snapshot => {
-      actividades = GlCnx.snapshotToArray(snapshot);      
-      console.log("actividades:", actividades);
-        resolve(actividades);
-        return actividades;
+      _actividades = GlCnx.snapshotToArray(snapshot);            
+      console.log("desde getActividades", _actividades);
+      _commit('setActividades', _actividades); 
+      resolve(true);
       });
    }) 
   }
@@ -28,39 +28,30 @@ const ModuloActividades = (function (GlCnx) {
 
 const getters ={
     getActividades: (state) => {
-      return state.actividades
-    },
+        return state.actividades;
+      },
 };
 
 const mutations={
-    setActividades:(state,actividades) => {
-      console.log("setActividades=>",actividades)
-      state.actividades = actividades;
-    },  
+    setActividades:(state,actividades) => state.actividades = actividades,  
 };
 
-
 const actions = {
-
-  GetAllActividades: ({
-    commit
-  }) => {
+  GetAllActividades: ({commit}) => {
     // Do something here... lets say, a http call using vue-resource
-    ModuloActividades.getActividades(state.actividades).then(response => {
-        // http success, call the mutator and change something in state
-        console.log("GetAllActividades=>", response);
-        commit('setActividades', response);
-      })
-      .catch(e => {
-        console.warn("error=>", e);
-      });
+    ModuloActividades.getActividades(commit).then(response => {
+      // http success, call the mutator and change something in state
+      //commit('setActividades', response);      
+    })
+    .catch(e => {
+      console.warn("error=>",e);
+    });
   },
 }
 
 export default {
     state: {
         actividades: [],      
-        actividadesdb:ModuloActividades.getActividades,
     },
     getters,
     mutations,
